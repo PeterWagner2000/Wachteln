@@ -1,0 +1,188 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Cashflow Wachtelzucht</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 40px;
+    }
+    h1 {
+      color: #333;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 30px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      border-radius: 12px;
+    }
+    label {
+      display: block;
+      margin: 10px 0 5px;
+      font-weight: bold;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1em;
+    }
+    button {
+      background: #2a9d8f;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #21867a;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 30px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background: #f1f1f1;
+    }
+    #saldo {
+      font-weight: bold;
+      font-size: 1.2em;
+      margin-top: 20px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Cashflow Wachtelzucht</h1>
+
+    <label for="datum">Datum</label>
+    <input type="date" id="datum">
+
+    <label for="typ">Typ</label>
+    <select id="typ" onchange="updateKategorieDropdown()">
+      <option value="Einnahme">Einnahme</option>
+      <option value="Ausgabe">Ausgabe</option>
+    </select>
+
+    <label for="kategorie">Kategorie</label>
+    <select id="kategorie"></select>
+
+    <label for="beschreibung">Beschreibung</label>
+    <input type="text" id="beschreibung" placeholder="z. B. 100 Bruteier von Züchter XY">
+
+    <label for="betrag">Betrag (Kč)</label>
+    <input type="number" id="betrag" step="0.01">
+
+    <button onclick="eintragHinzufuegen()">Eintrag hinzufügen</button>
+
+    <div id="saldo">Saldo: 10 000 Kč</div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Datum</th>
+          <th>Typ</th>
+          <th>Kategorie</th>
+          <th>Beschreibung</th>
+          <th>Einnahmen (Kč)</th>
+          <th>Ausgaben (Kč)</th>
+          <th>Saldo (Kč)</th>
+        </tr>
+      </thead>
+      <tbody id="tabelle">
+        <tr><td>23.04.2025</td><td>-</td><td>Startkapital</td><td>Startwert</td><td>10 000</td><td></td><td>10 000</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    let saldo = 10000;
+
+    const kategorien = {
+      Einnahme: [
+        "Verkauf Wachteln",
+        "Verkauf Eier",
+        "Verkauf Zubehör",
+        "Verkauf Fleisch",
+        "Sonstige Einnahmen"
+      ],
+      Ausgabe: [
+        "Kauf Bruteier",
+        "Futter",
+        "Einstreu",
+        "Wasser/Tränke",
+        "Strom",
+        "Brutgeräte",
+        "Stallmaterial",
+        "Medikamente/Vitamine",
+        "Transport",
+        "Tierarzt",
+        "Marketing",
+        "Abschreibungen",
+        "Sonstiges"
+      ]
+    };
+
+    function updateKategorieDropdown() {
+      const typ = document.getElementById('typ').value;
+      const kategorieSelect = document.getElementById('kategorie');
+      kategorieSelect.innerHTML = '';
+      kategorien[typ].forEach(kat => {
+        const option = document.createElement('option');
+        option.value = kat;
+        option.textContent = kat;
+        kategorieSelect.appendChild(option);
+      });
+    }
+
+    updateKategorieDropdown(); // beim Laden initial setzen
+
+    function eintragHinzufuegen() {
+      const datum = document.getElementById('datum').value;
+      const typ = document.getElementById('typ').value;
+      const kategorie = document.getElementById('kategorie').value;
+      const beschreibung = document.getElementById('beschreibung').value;
+      const betrag = parseFloat(document.getElementById('betrag').value) || 0;
+
+      if (typ === 'Einnahme') {
+        saldo += betrag;
+      } else {
+        saldo -= betrag;
+      }
+
+      document.getElementById('saldo').innerText = `Saldo: ${saldo.toLocaleString('de-DE')} Kč`;
+
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${datum}</td>
+        <td>${typ}</td>
+        <td>${kategorie}</td>
+        <td>${beschreibung}</td>
+        <td>${typ === 'Einnahme' ? betrag.toLocaleString('de-DE') : ''}</td>
+        <td>${typ === 'Ausgabe' ? betrag.toLocaleString('de-DE') : ''}</td>
+        <td>${saldo.toLocaleString('de-DE')}</td>
+      `;
+
+      document.getElementById('tabelle').appendChild(row);
+
+      document.getElementById('beschreibung').value = '';
+      document.getElementById('betrag').value = '';
+    }
+  </script>
+</body>
+</html>
