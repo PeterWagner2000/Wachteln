@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cashflow Wachtelzucht</title>
+    <meta
+      name="description"
+      content="Ein stabiler Cashflow-Tracker für deine Wachtelzucht mit automatischer Speicherung im Browser."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header>
+        <h1>Cashflow Wachtelzucht</h1>
+        <p class="subtitle">Läuft als statische Website und speichert Daten lokal im Browser.</p>
+      </header>
+
+      <section class="card">
+        <label for="datum">Datum</label>
+        <input type="date" id="datum" />
+
+        <label for="typ">Typ</label>
+        <select id="typ"></select>
+
+        <label for="kategorie">Kategorie</label>
+        <select id="kategorie"></select>
+
+        <label for="beschreibung">Beschreibung</label>
+        <input type="text" id="beschreibung" placeholder="z. B. 100 Bruteier von Züchter XY" />
+
+        <label for="betrag">Betrag (Kč)</label>
+        <input type="number" id="betrag" step="0.01" min="0" />
+
+        <button id="eintragBtn">Eintrag hinzufügen</button>
+
+        <div class="actions">
+          <button id="exportBtn" class="secondary">Daten exportieren (JSON)</button>
+          <label for="importFile" class="file-label">Daten importieren</label>
+          <input id="importFile" type="file" accept="application/json" />
+          <button id="resetBtn" class="danger">Alle Daten löschen</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <div id="saldo" class="saldo">Saldo: 10.000 Kč</div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Datum</th>
+                <th>Typ</th>
+                <th>Kategorie</th>
+                <th>Beschreibung</th>
+                <th>Einnahmen (Kč)</th>
+                <th>Ausgaben (Kč)</th>
+                <th>Saldo (Kč)</th>
+              </tr>
+            </thead>
+            <tbody id="tabelle"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
